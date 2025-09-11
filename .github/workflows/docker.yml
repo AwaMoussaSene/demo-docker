@@ -24,7 +24,7 @@ jobs:
       #  Build de l’image avec tag unique (commit SHA)
       - name: Build Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo-docker: latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/demo-docker:latest .
           docker build -t ${{ secrets.DOCKER_USERNAME }}/demo-docker:${{ github.sha }} .
 
       # Push des deux tags
