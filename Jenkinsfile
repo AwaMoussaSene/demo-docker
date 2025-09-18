@@ -5,7 +5,9 @@ pipeline {
     timestamps()
 
   }
-
+environment {
+    DOCKER_HOST = "tcp://localhost:2375"
+}
   environment {
   
     DOCKERHUB_CREDS = credentials("dockerhub-creds") 
