@@ -27,42 +27,42 @@ pipeline {
       }
     }
 
-    stage("Build & Push Docker Image") {
-      steps {
-        script {
-          // Récupère le nom de branche fourni par Jenkins (selon le type de job)
-          // BRANCH_NAME (multibranch) ou GIT_BRANCH (pipeline from SCM), fallback = 'main'
-          def src = (env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main')
+    // stage("Build & Push Docker Image") {
+    //   steps {
+    //     script {
+    //       // Récupère le nom de branche fourni par Jenkins (selon le type de job)
+    //       // BRANCH_NAME (multibranch) ou GIT_BRANCH (pipeline from SCM), fallback = 'main'
+    //       def src = (env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main')
 
-          // Sanitize pour un tag Docker valide : remplace tout caractère non autorisé par '-'
-          // Ex : "feature/my-feature" -> "feature-my-feature"
-          def safeTag = src.replaceAll('[^A-Za-z0-9._-]', '-')
+    //       // Sanitize pour un tag Docker valide : remplace tout caractère non autorisé par '-'
+    //       // Ex : "feature/my-feature" -> "feature-my-feature"
+    //       def safeTag = src.replaceAll('[^A-Za-z0-9._-]', '-')
 
-          // Nom complet de l'image à builder/pusher
-          def imageTag = "${IMAGE_NAME}:${safeTag}-${env.BUILD_NUMBER}"
-          def latestImageTag = "${IMAGE_NAME}:latest"
+    //       // Nom complet de l'image à builder/pusher
+    //       def imageTag = "${IMAGE_NAME}:${safeTag}-${env.BUILD_NUMBER}"
+    //       def latestImageTag = "${IMAGE_NAME}:latest"
 
-          echo "🐳 Construction de l'image Docker: ${imageTag}"
-          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
-            def app = docker.build(imageTag, '.')
-            echo "📤 Publication de l'image Docker: ${imageTag}"
-            app.push()
-            app.push("latest") // Ajoute un tag 'latest' pour la dernière version réussie
-          }
-          echo "✅ Image Docker construite et publiée avec succès."
-        }
-      }
-    }
+    //       echo "🐳 Construction de l'image Docker: ${imageTag}"
+    //       docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
+    //         def app = docker.build(imageTag, '.')
+    //         echo "📤 Publication de l'image Docker: ${imageTag}"
+    //         app.push()
+    //         app.push("latest") // Ajoute un tag 'latest' pour la dernière version réussie
+    //       }
+    //       echo "✅ Image Docker construite et publiée avec succès."
+    //     }
+    //   }
+    // }
 
-    stage("Deploy to Render (Test Environment)") {
-      steps {
-        echo "🚀 Déclenchement du déploiement sur Render..."
-        withCredentials([string(credentialsId: 'render-webhook', variable: 'HOOK_URL')]) {
-          sh "curl -i -X POST \"${HOOK_URL}\""
-        }
-        echo "✅ Déploiement déclenché."
-      }
-    }
+    // stage("Deploy to Render (Test Environment)") {
+    //   steps {
+    //     echo "🚀 Déclenchement du déploiement sur Render..."
+    //     withCredentials([string(credentialsId: 'render-webhook', variable: 'HOOK_URL')]) {
+    //       sh "curl -i -X POST \"${HOOK_URL}\""
+    //     }
+    //     echo "✅ Déploiement déclenché."
+    //   }
+    // }
   }
 
   post {
