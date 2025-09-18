@@ -7,6 +7,7 @@ pipeline {
 
     environment {
         // Pour Windows avec Docker Desktop exposé sur TCP
+        // 
         DOCKER_HOST = "tcp://localhost:2375"
 
         // Credentials Jenkins
