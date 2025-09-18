@@ -31,8 +31,8 @@ pipeline {
       steps {
         script {
           // Récupère le nom de branche fourni par Jenkins (selon le type de job)
-          // BRANCH_NAME (multibranch) ou GIT_BRANCH (pipeline from SCM), fallback = 'main'
-          def src = (env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'main')
+          // BRANCH_NAME (multibranch) ou GIT_BRANCH (pipeline from SCM), fallback = 'mester'
+          def src = (env.BRANCH_NAME ?: env.GIT_BRANCH ?: 'mester')
 
           // Sanitize pour un tag Docker valide : remplace tout caractère non autorisé par '-'
           // Ex : "feature/my-feature" -> "feature-my-feature"
